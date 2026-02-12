@@ -16,7 +16,14 @@ Basically instead of just vibe coding the user is being assisted by the agent an
 
 5) I opened codex and started setting it up by
 - Logging in with my google account.
-- Giving the required permissions to the app (Viewing, modifying the files on my computer, et cetera).
+- Giving the required permissions to the app (Viewing, modifying the files on my computer and etc).
 
-6) I opened a new folder on my desktop called Triangle App which will later store everthing that I made with codex.
-7) 
+6) I opened a new folder on my desktop and named it "Triangle App".
+7) This folder will be used later to store everthing that I create with codex using agents for this project.
+8) I went back to the codex tab and clicked on the button called "New Thread" which is on the top left corner of the screen. This button opens a new project, now the input and the output area for telling the selected ai agent what to create and to get the creation are visible.
+9) On the bottom of the screen I had the option to select an agent which I picked "GPT-5.3-Codex" for and also I had the option to select reasoning mode which I picked "Extra High" for.
+
+Although the generation process takes longer as AI agent versions or strength of reasoning increase the quality of the generated product improves accordingly and thats why I selected the highest versions.
+
+10) After that I started giving inputs of what I want the agent to create which is the triangle app. After every input codex either asked me a question to clearify what I want it to do or it gave me an output which also made me able to give another input for if I wanted to make changes at the output.
+11) 
