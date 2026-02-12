@@ -54,6 +54,26 @@ Although the generation process takes longer as AI agent versions or strength of
     - Confirm
     - I give permission. build it
 
-13) The last 7 inputs 
+13) I apparently didn't enable all of the permissions codex required to modify a folder and this is the reason of the last 7 inputs. After enabling the permissions from settings and sending one last input to the agent, the agent added the files it generated to the folder "Triangle App".
 
 
+
+Summary:
+I had a lot of fun while doing this project and I learned:
+- What vibe coding is.
+- How to vibe code.
+- What codex is.
+- What AI agents are.
+- How to create a web app.
+- How to properly use AI.
+- How to set up a proper github page
+- How to add pictures to documentations on github
+
+Also my documentation skills got massively improved alongside my knowledge and experience at properly using AI for coding different programs.
+
+Here are the screenshots of the website for solving triangle problems that I created using vibe coding method:
+
+<img width="1352" height="613" alt="Screenshot 2026-02-12 at 21 28 10" src="https://github.com/user-attachments/assets/5bc3db7a-0b56-4270-bc2a-322c9a3fcd7b" />
+<img width="1352" height="743" alt="Screenshot 2026-02-12 at 21 28 04" src="https://github.com/user-attachments/assets/df27a626-ca9d-4fd7-a618-0fb8802fc4e3" />
+<img width="1340" height="660" alt="Screenshot 2026-02-12 at 21 27 46" src="https://github.com/user-attachments/assets/71f78109-a1fa-457b-96d3-08a9b8be9e02" />
+<img width="1337" height="748" alt="Screenshot 2026-02-12 at 21 27 40" src="https://github.com/user-attachments/assets/dc017a04-fed6-4c8c-ac08-1fa32f23e11e" />
