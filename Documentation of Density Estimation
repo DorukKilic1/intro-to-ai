@@ -377,13 +377,10 @@ Plot lines:
 	•	plt.show() displays it.
 
 
-
-DODODODODODDODODOD
-***GMM fit quality using average log-likelihood***
+***GMM Fit Quality Using Average Log Likelihood***
 
 Line: lls = []
-What it does:
-Creates a list to store average log-likelihood values.
+This line creates a list to store average log likelihood values.
 
 Loop:
 for c in components:
@@ -391,120 +388,102 @@ gmm = GaussianMixture(n_components=c, random_state=42, covariance_type=“full�
 gmm.fit(X_proc)
 lls.append(gmm.score(X_proc))
 
-What each line does:
-	•	Creates and fits a GMM for each component count
-	•	gmm.score(X_proc) returns average log-likelihood per sample
-	•	Saves the value
+These lines were used for:
+	•	Creating and fitting a GMM for each component count.
+	•	gmm.score(X_proc) returning the average log likelihood per each sample
+	•	Saving the value
+Higher log likelihood means better fit on the graph but if the components are too many the model may become too complex.
+That is also why AIC and BIC are important since they determine the component value.
+Then the code draws the log likelihood vs the number of components graph. 
 
-Why this matters:
-Higher log-likelihood means better fit, but if components become too many, the model may become too complex.
-That is why AIC/BIC are also important.
 
-Then the plotting code draws log-likelihood vs number of components.
-
-⸻
-
-	6.	FORMULAS USED IN THIS PROJECT (WHAT THEY MEAN AND HOW THEY WORK)
-
-⸻
-
-This section explains the main formulas behind the methods and metrics in simple language.
+***FORMULAS I USED IN THIS PROJECT***
 
 A) Standardization Formula (used by StandardScaler)
 
 Formula:
 z = (x - mu) / sigma
 
-What each part means:
+What they mean:
 	•	x = original value
 	•	mu = mean (average) of the feature
 	•	sigma = standard deviation of the feature
 	•	z = standardized value
 
-What it does:
-It rescales features so they are centered around 0 and have a similar spread.
-Why it matters:
-K-Means and GMM use distances/probabilities, so large-scale features should not dominate.
+This rescales features so they are centered around 0 and have a more similar spread on the graph.
+K-Means and GMM use distances/probabilities so large-scale features wouldn't be accurate.
+
 
 B) K-Means Objective / Inertia (Within-Cluster SSE)
 
-Idea:
 K-Means tries to make points close to their cluster centers.
 
-Formula (conceptual):
-Inertia = sum of squared distances from each point to its assigned cluster center
+Formula:
+Inertia = the sum of the squared distances from each point to its assigned cluster center
 
 Meaning:
 	•	For each point, measure distance to its cluster center
 	•	Square it (so negatives don’t cancel and far points count more)
 	•	Add all distances together
-
-How it works:
 K-Means minimizes this value.
-Lower inertia = tighter clusters.
+The Lower the inertia = tighter clusters.
+
 
 C) Distance in K-Means (Euclidean distance)
 
-Formula for 2D (conceptual):
+Formula for 2D:
 distance = sqrt((x1 - c1)^2 + (x2 - c2)^2)
 
-General idea:
-It measures how far a point is from a cluster center.
+This measures how far a point is from a cluster center.
 K-Means assigns each point to the nearest center.
+
 
 D) Silhouette Score (cluster quality)
 
-For one point:
 silhouette = (b - a) / max(a, b)
 
-What each part means:
-	•	a = average distance to points in the same cluster
-	•	b = average distance to points in the nearest different cluster
+What this means:
+	•	a = average distance to the points in the same cluster.
+	•	b = average distance to the points in the nearest different cluster.
 
-How to read it:
-	•	close to 1: point is well clustered
-	•	close to 0: point is between clusters
-	•	below 0: point may be in the wrong cluster
+How to read it properly:
+	•	if close to 1: point is well clustered
+	•	if close to 0: point is between clusters
+	•	if below 0: point may be in the wrong cluster
 
-The final silhouette score is the average over all points.
+The final silhouette value is the average over all points.
 
-E) Gaussian (Normal) Distribution (used in GMM)
 
-GMM assumes each component is Gaussian (bell-shaped).
+E) Gaussian (Normal) Distribution
 
-In simple terms:
-A Gaussian gives a probability density based on:
+GMM expects each component that is Gaussian (bell-shaped).
+A Gaussian returns a probability density based on:
 	•	the mean (center)
 	•	the covariance (spread and shape)
 
-What covariance means:
-	•	It controls how stretched the Gaussian is
-	•	In 2D, it can make circles or tilted ellipses
 
 F) GMM Mixture Density Formula (conceptual)
 
-Formula idea:
 p(x) = w1N1(x) + w2N2(x) + … + wk*Nk(x)
-
-What each part means:
+What this means:
 	•	p(x) = total probability density at point x
 	•	wi = weight of component i (how much that Gaussian contributes)
 	•	Ni(x) = probability density from Gaussian i at x
 
-How it works:
 GMM combines multiple Gaussians to model complex data shapes.
 
-G) E-step Responsibility Formula (conceptual)
-In the E-step, GMM calculates a probability (called responsibility) that component k generated point x.
 
-Idea:
+G) E-step Responsibility Formula (conceptual)
+
+
+In the E-step GMM calculates a probability (called responsibility) that component k generated point x.
 responsibility = (component weight * component density at x) / (sum of all components’ weighted densities at x)
 
 What it means:
-It gives soft membership, like:
 	•	0.7 for component 1
 	•	0.2 for component 2
 	•	0.1 for component 3
+
 
 H) M-step Updates (conceptual)
 After the E-step, GMM updates:
@@ -512,121 +491,96 @@ After the E-step, GMM updates:
 	2.	Means (cluster centers)
 	3.	Covariances (cluster shapes)
 
-How it works:
+How this works:
 It uses the responsibilities as weighted contributions.
-Points with higher responsibility influence that Gaussian more.
+Points with higher responsibility changes its Gaussian more.
 
 I) Log-Likelihood (used in GMM evaluation)
 
-Concept:
 Likelihood measures how well the model explains the data.
-Log-likelihood is the logarithm of likelihood (easier to compute and more stable).
-
+Log likelihood is the logarithm of likelihood (easier to compute and more stable).
 Higher log-likelihood = better fit
 
-In your code:
-	•	gmm.score(X_proc) gives average log-likelihood per sample
-	•	gmm2.score_samples(grid) gives log density for each grid point
 
 J) AIC (Akaike Information Criterion)
 
-Concept formula:
 AIC = 2k - 2ln(L)
-
-What each part means:
+What this means:
 	•	k = number of model parameters
 	•	L = likelihood of the model
 	•	ln(L) = log-likelihood
 
-How to interpret:
 Lower AIC is better.
-It rewards good fit but penalizes too many parameters.
+
 
 K) BIC (Bayesian Information Criterion)
 
-Concept formula:
 BIC = ln(n)*k - 2ln(L)
-
-What each part means:
+What this means:
 	•	n = number of data points
 	•	k = number of parameters
 	•	L = likelihood
 
-How to interpret:
 Lower BIC is better.
-BIC usually penalizes complexity more strongly than AIC.
+BIC penalizes complexity better than AIC.
 
-L) PCA (Principal Component Analysis) idea
 
-PCA does not use one simple formula in your code directly, but conceptually:
+L) PCA (Principal Component Analysis)
+
+PCA does not use one simple formula in my code directly:
 	•	It finds new axes (principal components)
 	•	These axes capture the most variation in the data
 	•	The first component captures the most variance
-	•	The second captures the next most (while being different from the first)
+	•	The second captures the second most (while being different from the first)
 
-Why PCA is used here:
-It reduces many dimensions to 2 so clusters can be visualized.
+PCA is used because it reduces multiple dimentions to do for clusters to be visulized.
+
 
 M) Exponential function used in probability conversion
 
-Line in your code:
 prob = np.exp(logprob)
 
-What formula/function is used:
+This is the formula:
 exp(x) = e^x
+This formula is used to convert log probability into standart probability density.
+This formula is used in order for more stabilization.
 
-What it does:
-Converts log-probability back into standard probability density.
 
-Why:
-GMM often returns log values for stability, and contour plots need regular probability density values.
+***VISUALIZATIONS PRODUCED***
 
-⸻
 
-	7.	VISUALIZATIONS PRODUCED AND WHAT EACH ONE SHOWS
-
-⸻
-
-	1.	Numeric Feature Histograms
-Shows the distributions of numeric columns.
-Use this to understand:
-
+1.	Numeric Feature Histograms
+These histograms show the distributions of numeric columns.
+Used to understand:
 	•	spread
 	•	skew
 	•	possible outliers
 
 	2.	K-Means Elbow Plot (Inertia vs K)
-Shows how inertia changes as K increases.
-Use this to find a good K where improvement slows down (the “elbow”).
-	3.	K-Means Silhouette Score Plot
-Shows clustering quality for each K.
-Higher is better.
-Use this along with the elbow plot to choose K.
-	4.	K-Means PCA Scatter Plot (2D)
-Shows student points in 2D after PCA, colored by cluster.
-Use this to visually inspect separation/overlap between clusters.
-	5.	GMM BIC/AIC Plot
-Shows model fit quality vs number of GMM components.
-Lower is better.
-Use this to choose a reasonable number of Gaussian components.
-	6.	GMM Probability Surface + Decision Boundaries
-This is the main density estimation visualization.
-It shows:
+These plots are used to understand how inertia changes as K increases.
+Used to find a good k improvement meaning the place where it slows down.
 
+	3.	K-Means Silhouette Score Plot
+This formula is used to show clustering quality for each K the higher it being the better.
+
+	4.	K-Means PCA Scatter Plot (2D)
+This formula is used to show student points in 2D after PCA and is colored by cluster.
+
+	5.	GMM BIC/AIC Plot
+This formula is used to show model fit quality vs number of GMM components and the lower it is the better.
+
+	6.	GMM Probability Surface + Decision Boundaries
+This is the main density estimation visualization and it shows:
 	•	contour lines = probability density levels
-	•	colored regions = which Gaussian component dominates
+	•	colored regions = which Gaussian component is supperior
 	•	points = actual students
 
 	7.	GMM Log-Likelihood Plot
-Shows how average log-likelihood changes with number of components.
-Higher is better, but should be balanced with AIC/BIC.
+This formula is used to show how average log likelihood changes with number of components and also the higher it is is better but it should be balanced.
 
-⸻
+	8.	RESULTS
 
-	8.	RESULTS AND INTERPRETATION (TEMPLATE YOU CAN FILL AFTER RUNNING)
-
-⸻
-
+DODODDODODODODD
 K-Means Results:
 	•	I tested K values from 2 to 10.
 	•	The elbow plot suggested a good choice around K = [write your result].
