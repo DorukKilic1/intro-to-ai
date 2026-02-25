@@ -1,0 +1,773 @@
+Dataset  I Used:
+
+students_ai_usage.csv
+
+
+The Assigment:
+
+This assigment wanted me to analyze a dataset, generate the required graphs and estimate density.
+
+
+***Dataset Info***
+
+The dataset included the following information:
+
+	•	age
+	•	study_hours_per_day
+	•	grades_before_ai
+	•	grades_after_ai
+	•	daily_screen_time_hours
+	•	education_level
+	•	ai_tools_used
+	•	purpose_of_ai
+	•	uses_ai (Yes/No)
+
+
+***Key Concepts I Learned***
+
+1) Clustering
+To group similar data points together automatically (without their labels).
+
+2) Density Estimation
+Where data points are more common meaning if many students have similar values that area has higher density.
+
+3) K-Means
+K-Means is a clustering method that create K groups by finding cluster centers and assigning points to the nearest center.
+
+4) Gaussian Mixture Model (GMM)
+GMM is a density estimation and clustering method.
+It assumes that the data is made out of multiple Gaussian (bell-shaped) points.
+It gives a point can partially belong to multiple clusters).
+
+5) E-M Algorithm (Expectation-Maximization)
+GMM uses the E-M algorithms to learn the Gaussian groups.
+	•	E-step (Expectation): Estimates the probabilities of each point belonging to each Gaussian.
+	•	M-step (Maximization): Updates Gaussian parameters.
+It also repeats until the model stabilizes.
+
+
+***Libraries That I Used***
+
+
+	1.	import numpy as np
+NumPy is used for numerical operations and arrays.
+
+	2.	import pandas as pd
+Pandas is used for loading and modifying the dataset as a table.
+
+	3.	import matplotlib.pyplot as plt
+Matplotlib is used for all graphs and visualizations.
+
+	4.	from sklearn.model_selection import train_test_split
+Used to split data's from the dataset to training and testing sets.
+
+	5.	from sklearn.preprocessing import OneHotEncoder, StandardScaler
+	•	OneHotEncoder converts text categories into number versions.
+	•	StandardScaler scales the number features to similar ranges.
+
+	6.	from sklearn.compose import ColumnTransformer
+Lets you apply different preprocessing methods to differing column types in one step.
+
+	7.	from sklearn.pipeline import Pipeline
+Used to fuse preprocessing and model steps making ur code simpler.
+
+	8.	from sklearn.cluster import KMeans
+Cresates K-Means clustering models.
+
+	9.	from sklearn.mixture import GaussianMixture
+Gaussian Mixture Model for density estimation and probabilistic clustering.
+
+	10.	from sklearn.decomposition import PCA
+Principal Component Analysis meaning reduces dimensions to 2D for visualization.
+
+	11.	from sklearn.metrics import silhouette_score
+Measures clustering qualitys for K-Means.
+
+
+***The Code***
+
+
+df = pd.read_csv(“students_ai_usage.csv”):
+Loads the CSV file into a pandas DataFrame named df.
+This creates the main table of data.
+
+print(df.head())
+Prints the first 5 rows.
+I used this for verifying that the file has loaded correctly. It also lets me preview the first 5 rows.
+
+Line: print(df.info()):
+Shows:
+	•	column names
+	•	number of non-null values
+	•	data types (int, float, object/text)
+This helps me understand the dataset structure.
+
+print(df.isna().sum()):
+Counts the missing values in each column.
+Used for deciding whether to clean the data or not.
+
+
+Exploring numeric distributions
+
+numeric_cols = [ … ]:
+Creates a list of numeric columns to analyze the data and plot it.
+
+The columns that were shown are:
+
+	•	age
+	•	study_hours_per_day
+	•	grades_before_ai
+	•	grades_after_ai
+	•	daily_screen_time_hours
+
+df[numeric_cols].hist(bins=20, figsize=(12, 8)):
+This creates histograms for the numeric columns.
+	•	bins=20 means each histogram has 20 bars
+	•	figsize=(12, 8) sets the figure size
+This also helps you see the shape of ur data.
+
+plt.suptitle(“Numeric Feature Distributions”, fontsize=14):
+Adds title above all the histograms that I created.
+
+plt.tight_layout():
+Adjusts the spacing so the labels and the titles don’t overlap.
+
+plt.show():
+This displays the histogram figure.
+
+Defining feature types
+
+target_like_cols = [“uses_ai”]:
+This stores the binary column name in a list.
+
+categorical_cols = [ … ]:
+This creates a list of text-based columns like:
+	•	education_level
+	•	ai_tools_used
+	•	purpose_of_ai
+I had to convert these to numeric values before clustering or else it would be using the wrong variable types.
+
+all_cols = df.columns.tolist():
+Gets all dataset column names as a Python list.
+
+feature_cols = [c for c in all_cols if c not in []]:
+This creates a list of feature columns.
+This line is flexable so it can be used to to remove columns later.
+
+Cleaning rows and preparing feature table
+
+X = df.dropna().copy():
+Removes the rows with missing values and then dupliicates it for getting a clean copy that 
+prevents accidental changes to the original df.
+
+X_features = X.drop(columns=[]):
+This make sures that all of the columns are kept as features.
+
+num_cols = [c for c in numeric_cols if c in X_features.columns]:
+This makes sure that only numeric columns that actually exist were kept.
+It prevents errors if a column is missing.
+
+cat_cols = [c for c in categorical_cols if c in X_features.columns]:
+Uses the same idea for categorical columns.
+
+bin_cols = [“uses_ai”] if “uses_ai” in X_features.columns else []:
+If the uses_ai column exists include it in binary columns if it doesn't use an empty list in the binary columns.
+
+
+***Preprocessing setup***
+
+preprocess = ColumnTransformer(…)
+Creates a preprocessing system that makes each column type correctly.
+
+Inside the transformers list:
+	1.	(“num”, StandardScaler(), num_cols)
+This applies StandardScaler to numeric columns meaning it scales them so they are comparable with distance-based methods.
+
+	2.	(“cat”, OneHotEncoder(handle_unknown=“ignore”), cat_cols)
+This converts text categories to numeric columns.
+handle_unknown=“ignore” prevents errors if new categories appear.
+
+	3.	(“bin”, “passthrough”, bin_cols)
+This makes sure that binary columns are kept as they are.
+This is important because K-Means and GMM expect numeric input and the data I work with has mixed column types.
+
+
+***Converting uses_ai from Yes/No to 1/0 ***
+
+X_features[“uses_ai”] = X_features[“uses_ai”].astype(str).str.strip()
+	•	Converts values into strings
+	•	Removes extra spaces
+
+X_features[“uses_ai”] = X_features[“uses_ai”].map({“Yes”: 1, “No”: 0})
+Converts the text values to numbers:
+Yes being 1 and no being 0 similar to binary.
+I had to use this because clustering models cant use text values.
+
+X_features = X_features.dropna(subset=[“uses_ai”])
+This removes the rows where uses_ai wasn't yes or no in order for the map to not produce NaN.
+
+
+***Applying preprocessing***
+
+X_proc = preprocess.fit_transform(X_features)
+This runs all preprocessing steps and produces a compeleted numeric matrix.
+This matrix will be used by K-Means and GMM.
+“fit_transform” means:
+	•	fit: set the preprocessing rules that were given.
+	•	transform: apply these rules.
+
+
+***K-Means Model Selection***
+
+ks = range(2, 11)
+Creates K values from 2 to 10 to for testing.
+
+inertias = []
+Creates an empty list to store the values.
+
+Loop:
+for k in ks:
+km = KMeans(n_clusters=k, random_state=42, n_init=10)
+km.fit(X_proc)
+inertias.append(km.inertia_)
+This does the following.
+	•	Creating a K-Means model with the k clusters.
+	•	random_state=42 makes the results able to be dublicated.
+	•	n_init=10 runs K-Means multiple times with different points and keeps the best one.
+	•	Fits the model to X_proc.
+	•	Stores inertia (within-cluster sum of squares).
+Lower inertia means points are closer to cluster centers.
+
+Plot lines:
+	•	plt.figure(figsize=(7, 5)) creates plot area
+	•	plt.plot(list(ks), inertias, marker=“o”) draws K vs inertia
+	•	plt.xlabel(…) labels x-axis
+	•	plt.ylabel(…) labels y-axis
+	•	plt.title(…) gives a title
+	•	plt.grid(True, alpha=0.3) adds a light colored grid
+	•	plt.show() shows the graph
+
+***K-Means Model Selection***
+
+sil_scores = []
+Creates a list to store silhouette scores.
+
+Loop:
+for k in ks:
+km = KMeans(n_clusters=k, random_state=42, n_init=10)
+labels = km.fit_predict(X_proc)
+sil = silhouette_score(X_proc, labels)
+sil_scores.append(sil)
+
+These lines do the following:
+	•	Creating a K-Means model.
+	•	Fiting the model and getting the cluster labels in one step (fit_predict).
+	•	Computing the silhouette score and saving it.
+Silhouette score measures how separated the clusters are.
+Higher is usually better.
+Then plotting code:
+Same plotting steps as before but now it plots silhouette score vs K.
+
+***Final K-Means Model and Cluster Labels***
+
+best_k = 3
+Sets the chosen number of clusters to 3 (based on the found plots that were explained in the 2 lines before this).
+
+kmeans = KMeans(n_clusters=best_k, random_state=42, n_init=10)
+This creates the final K-Means model.
+
+labels_km = kmeans.fit_predict(X_proc)
+Fits the K-Means and gives it a cluster label for each student.
+
+***PCA (2D visualization of clusters)***
+
+pca = PCA(n_components=2, random_state=42)
+This creates a PCA model to reduce data to 2 dimensions.
+
+X_2d = pca.fit_transform(X_proc)
+This transforms the high dimensional processed data into 2D coordinates.
+Meaning that now each student has:
+	•	X_2d[:, 0] = first PCA component
+	•	X_2d[:, 1] = second PCA component
+This is important because the processed data may have multiple columns after encoding which is impossible to plot.
+PCA makes it plottable.
+
+Plot lines:
+	•	plt.scatter(X_2d[:, 0], X_2d[:, 1], c=labels_km, alpha=0.7)
+This plots students in 2D and colors them by K-Means cluster.
+
+
+***GMM model selection (AIC/BIC)***
+
+components = range(1, 11)
+Tests GMM with 1 to 10 Gaussian components.
+
+Line: bics = []
+Line: aics = []
+These lines create lists to store BIC and AIC values.
+
+Loop:
+for c in components:
+gmm = GaussianMixture(n_components=c, random_state=42, covariance_type=“full”)
+gmm.fit(X_proc)
+bics.append(gmm.bic(X_proc))
+aics.append(gmm.aic(X_proc))
+These lines do the following:
+	•	Creating a GMM with c Gaussian components.
+	•	allowing flexible Gaussian shapes.
+	•	Fitting the model using the E-M algorithm.
+	•	Computing and storing the BIC.
+	•	Computing and storing the AIC.
+AIC and BIC were used to evaluate model fit while also lowering the excess complexity since lower values are better.
+
+Plot lines:
+Plots BIC and AIC across component counts to help choose the best number of components.
+
+***GMM Probability Surface and Decision Boundaries***
+
+Line: feat_x = “study_hours_per_day”
+Line: feat_y = “grades_after_ai”
+These lines select the 2 features that will be used for the 2D probability surface plot.
+
+D2 = df[[feat_x, feat_y]].dropna().copy()
+Creates a new 2-column dataset with only those features and removes the missing rows.
+
+scaler_2d = StandardScaler()
+Creates a scaler for the 2D data.
+
+Z = scaler_2d.fit_transform(D2)
+Standardizes the 2D data that improves GMM stability and makes the axes comparable.
+
+gmm2 = GaussianMixture(n_components=3, random_state=42, covariance_type=“full”)
+This line creates a 2D GMM with 3 components for visualization.
+
+gmm2.fit(Z)
+This line fits the GMM using the E-M algorithm.
+
+labels_gmm2 = gmm2.predict(Z)
+This line assigns each student point to the most likely Gaussian component.
+
+Grid setup:
+x_min, x_max = Z[:, 0].min() - 1, Z[:, 0].max() + 1
+y_min, y_max = Z[:, 1].min() - 1, Z[:, 1].max() + 1
+These lines find the plot boundaries with some extra margin.
+
+xx, yy = np.meshgrid(np.linspace(x_min, x_max, 300), np.linspace(y_min, y_max, 300))
+This line creates a dense 300x300 grid of points over the plotting area to check the GMM probability.
+
+grid = np.c_[xx.ravel(), yy.ravel()]
+This line flattens the grid into a list of x and y points for model scoring.
+
+logprob = gmm2.score_samples(grid)
+This line computes the log probability density for each grid point.
+Log values are numerically more stable than very tiny probabilities so thats why they were used.
+
+prob = np.exp(logprob).reshape(xx.shape)
+This line converts the log-probability back into probability density using exp.
+Also it reshapes it back into the 2D grid shape for plotting.
+
+pred = gmm2.predict(grid).reshape(xx.shape)
+This line predicts the most likely Gaussian component for each grid point which gives the decision regions.
+
+Plot lines:
+	•	plt.contourf(xx, yy, pred, alpha=0.25): fills regions by the predicted component.
+	•	plt.contour(xx, yy, prob, levels=10): draws the density contour lines.
+	•	plt.clabel(cs, inline=True, fontsize=8): labels the contour lines.
+	•	plt.scatter(Z[:, 0], Z[:, 1], c=labels_gmm2, s=25, alpha=0.7): overlays actual points.
+	•	plt.show() displays it.
+
+
+
+DODODODODODDODODOD
+***GMM fit quality using average log-likelihood***
+
+Line: lls = []
+What it does:
+Creates a list to store average log-likelihood values.
+
+Loop:
+for c in components:
+gmm = GaussianMixture(n_components=c, random_state=42, covariance_type=“full”)
+gmm.fit(X_proc)
+lls.append(gmm.score(X_proc))
+
+What each line does:
+	•	Creates and fits a GMM for each component count
+	•	gmm.score(X_proc) returns average log-likelihood per sample
+	•	Saves the value
+
+Why this matters:
+Higher log-likelihood means better fit, but if components become too many, the model may become too complex.
+That is why AIC/BIC are also important.
+
+Then the plotting code draws log-likelihood vs number of components.
+
+⸻
+
+	6.	FORMULAS USED IN THIS PROJECT (WHAT THEY MEAN AND HOW THEY WORK)
+
+⸻
+
+This section explains the main formulas behind the methods and metrics in simple language.
+
+A) Standardization Formula (used by StandardScaler)
+
+Formula:
+z = (x - mu) / sigma
+
+What each part means:
+	•	x = original value
+	•	mu = mean (average) of the feature
+	•	sigma = standard deviation of the feature
+	•	z = standardized value
+
+What it does:
+It rescales features so they are centered around 0 and have a similar spread.
+Why it matters:
+K-Means and GMM use distances/probabilities, so large-scale features should not dominate.
+
+B) K-Means Objective / Inertia (Within-Cluster SSE)
+
+Idea:
+K-Means tries to make points close to their cluster centers.
+
+Formula (conceptual):
+Inertia = sum of squared distances from each point to its assigned cluster center
+
+Meaning:
+	•	For each point, measure distance to its cluster center
+	•	Square it (so negatives don’t cancel and far points count more)
+	•	Add all distances together
+
+How it works:
+K-Means minimizes this value.
+Lower inertia = tighter clusters.
+
+C) Distance in K-Means (Euclidean distance)
+
+Formula for 2D (conceptual):
+distance = sqrt((x1 - c1)^2 + (x2 - c2)^2)
+
+General idea:
+It measures how far a point is from a cluster center.
+K-Means assigns each point to the nearest center.
+
+D) Silhouette Score (cluster quality)
+
+For one point:
+silhouette = (b - a) / max(a, b)
+
+What each part means:
+	•	a = average distance to points in the same cluster
+	•	b = average distance to points in the nearest different cluster
+
+How to read it:
+	•	close to 1: point is well clustered
+	•	close to 0: point is between clusters
+	•	below 0: point may be in the wrong cluster
+
+The final silhouette score is the average over all points.
+
+E) Gaussian (Normal) Distribution (used in GMM)
+
+GMM assumes each component is Gaussian (bell-shaped).
+
+In simple terms:
+A Gaussian gives a probability density based on:
+	•	the mean (center)
+	•	the covariance (spread and shape)
+
+What covariance means:
+	•	It controls how stretched the Gaussian is
+	•	In 2D, it can make circles or tilted ellipses
+
+F) GMM Mixture Density Formula (conceptual)
+
+Formula idea:
+p(x) = w1N1(x) + w2N2(x) + … + wk*Nk(x)
+
+What each part means:
+	•	p(x) = total probability density at point x
+	•	wi = weight of component i (how much that Gaussian contributes)
+	•	Ni(x) = probability density from Gaussian i at x
+
+How it works:
+GMM combines multiple Gaussians to model complex data shapes.
+
+G) E-step Responsibility Formula (conceptual)
+In the E-step, GMM calculates a probability (called responsibility) that component k generated point x.
+
+Idea:
+responsibility = (component weight * component density at x) / (sum of all components’ weighted densities at x)
+
+What it means:
+It gives soft membership, like:
+	•	0.7 for component 1
+	•	0.2 for component 2
+	•	0.1 for component 3
+
+H) M-step Updates (conceptual)
+After the E-step, GMM updates:
+	1.	Component weights (how big each cluster is)
+	2.	Means (cluster centers)
+	3.	Covariances (cluster shapes)
+
+How it works:
+It uses the responsibilities as weighted contributions.
+Points with higher responsibility influence that Gaussian more.
+
+I) Log-Likelihood (used in GMM evaluation)
+
+Concept:
+Likelihood measures how well the model explains the data.
+Log-likelihood is the logarithm of likelihood (easier to compute and more stable).
+
+Higher log-likelihood = better fit
+
+In your code:
+	•	gmm.score(X_proc) gives average log-likelihood per sample
+	•	gmm2.score_samples(grid) gives log density for each grid point
+
+J) AIC (Akaike Information Criterion)
+
+Concept formula:
+AIC = 2k - 2ln(L)
+
+What each part means:
+	•	k = number of model parameters
+	•	L = likelihood of the model
+	•	ln(L) = log-likelihood
+
+How to interpret:
+Lower AIC is better.
+It rewards good fit but penalizes too many parameters.
+
+K) BIC (Bayesian Information Criterion)
+
+Concept formula:
+BIC = ln(n)*k - 2ln(L)
+
+What each part means:
+	•	n = number of data points
+	•	k = number of parameters
+	•	L = likelihood
+
+How to interpret:
+Lower BIC is better.
+BIC usually penalizes complexity more strongly than AIC.
+
+L) PCA (Principal Component Analysis) idea
+
+PCA does not use one simple formula in your code directly, but conceptually:
+	•	It finds new axes (principal components)
+	•	These axes capture the most variation in the data
+	•	The first component captures the most variance
+	•	The second captures the next most (while being different from the first)
+
+Why PCA is used here:
+It reduces many dimensions to 2 so clusters can be visualized.
+
+M) Exponential function used in probability conversion
+
+Line in your code:
+prob = np.exp(logprob)
+
+What formula/function is used:
+exp(x) = e^x
+
+What it does:
+Converts log-probability back into standard probability density.
+
+Why:
+GMM often returns log values for stability, and contour plots need regular probability density values.
+
+⸻
+
+	7.	VISUALIZATIONS PRODUCED AND WHAT EACH ONE SHOWS
+
+⸻
+
+	1.	Numeric Feature Histograms
+Shows the distributions of numeric columns.
+Use this to understand:
+
+	•	spread
+	•	skew
+	•	possible outliers
+
+	2.	K-Means Elbow Plot (Inertia vs K)
+Shows how inertia changes as K increases.
+Use this to find a good K where improvement slows down (the “elbow”).
+	3.	K-Means Silhouette Score Plot
+Shows clustering quality for each K.
+Higher is better.
+Use this along with the elbow plot to choose K.
+	4.	K-Means PCA Scatter Plot (2D)
+Shows student points in 2D after PCA, colored by cluster.
+Use this to visually inspect separation/overlap between clusters.
+	5.	GMM BIC/AIC Plot
+Shows model fit quality vs number of GMM components.
+Lower is better.
+Use this to choose a reasonable number of Gaussian components.
+	6.	GMM Probability Surface + Decision Boundaries
+This is the main density estimation visualization.
+It shows:
+
+	•	contour lines = probability density levels
+	•	colored regions = which Gaussian component dominates
+	•	points = actual students
+
+	7.	GMM Log-Likelihood Plot
+Shows how average log-likelihood changes with number of components.
+Higher is better, but should be balanced with AIC/BIC.
+
+⸻
+
+	8.	RESULTS AND INTERPRETATION (TEMPLATE YOU CAN FILL AFTER RUNNING)
+
+⸻
+
+K-Means Results:
+	•	I tested K values from 2 to 10.
+	•	The elbow plot suggested a good choice around K = [write your result].
+	•	The silhouette score was best (or near best) at K = [write your result].
+	•	I selected K = 3 for the final model.
+	•	In the PCA plot, the clusters looked [well-separated / somewhat overlapping / highly overlapping].
+
+GMM Results:
+	•	I tested 1 to 10 Gaussian components.
+	•	The BIC/AIC plot suggested [write best component count].
+	•	The log-likelihood increased as components increased, but after [write value], improvement became smaller.
+	•	The probability contour plot showed high-density regions where many students had similar study-hours and grades-after-AI values.
+
+Interpretation:
+This suggests the dataset contains different student patterns, for example:
+	•	a group with more study hours and stronger grades after AI,
+	•	a middle/average group,
+	•	another group with different AI usage or lower study time.
+
+Why GMM is useful here:
+GMM gives probabilistic clusters and density estimates, so it can model overlapping groups better than K-Means.
+
+⸻
+
+	9.	HOW THIS PROJECT MATCHES THE ASSIGNMENT
+
+⸻
+
+Assignment Requirement: Investigate the dataset
+Done by:
+	•	df.head()
+	•	df.info()
+	•	df.isna().sum()
+	•	histograms of numeric features
+
+Assignment Requirement: Apply at least one density estimation method
+Done by:
+	•	Gaussian Mixture Model (GMM) (density estimation)
+Also included:
+	•	K-Means clustering
+
+Assignment Requirement: Visualize clusters/distributions
+Done by:
+	•	histograms
+	•	PCA K-Means cluster plot
+	•	GMM contour and decision boundary plot
+
+Assignment Requirement: Visualize probability surfaces or decision boundaries
+Done by:
+	•	GMM probability contour surface
+	•	GMM component decision regions (contourf)
+
+Assignment Requirement: Visualize model fit quality
+Done by:
+	•	K-Means inertia (elbow)
+	•	K-Means silhouette
+	•	GMM AIC/BIC
+	•	GMM average log-likelihood
+
+Assignment Requirement: Explain method used, E-M process, results
+Done by:
+	•	K-Means and GMM sections
+	•	E-M explanation
+	•	Results interpretation template
+
+Assignment Requirement: GitHub documentation with dataset, methods, code explanation, results
+Done by:
+	•	This documentation (can be pasted into README.md)
+
+⸻
+
+	10.	DEMONSTRATION OF IMPLEMENTATION (WHAT YOU IMPLEMENTED)
+
+⸻
+
+In this project, I implemented:
+	1.	Data loading and checking
+	2.	Missing value handling (dropna)
+	3.	Feature type separation (numeric, categorical, binary)
+	4.	Preprocessing with:
+	•	StandardScaler
+	•	OneHotEncoder
+	•	ColumnTransformer
+	5.	K-Means clustering
+	6.	K-Means model quality checks (inertia and silhouette)
+	7.	PCA for cluster visualization
+	8.	GMM for density estimation
+	9.	GMM quality checks (AIC, BIC, log-likelihood)
+	10.	GMM probability surface and decision boundary visualization
+	11.	Explanation of E-M algorithm and density estimation concepts
+
+⸻
+
+	11.	OPTIONAL CODE CLEANUP (TO MAKE IT EASIER FOR BEGINNERS)
+
+⸻
+
+These imports are currently not used:
+	•	train_test_split
+	•	Pipeline
+
+You can remove them to simplify the script.
+
+Also, these lines are flexible and currently do not remove any columns:
+	•	feature_cols = [c for c in all_cols if c not in []]
+	•	X_features = X.drop(columns=[])
+
+You can keep them (they are useful for future changes), but a beginner version could be simpler if you directly use all columns.
+
+⸻
+
+	12.	HOW TO RUN THE PROJECT (FOR GITHUB README)
+
+⸻
+
+	1.	Place the file students_ai_usage.csv in the same folder as your Python script or notebook.
+	2.	Install required libraries:
+pip install numpy pandas matplotlib scikit-learn
+	3.	Run the script (or notebook).
+	4.	Look at the generated plots:
+
+	•	histograms
+	•	elbow plot
+	•	silhouette plot
+	•	PCA cluster plot
+	•	GMM BIC/AIC plot
+	•	GMM probability surface plot
+	•	GMM log-likelihood plot
+
+	5.	Fill in the Results and Interpretation section using your actual plot observations.
+
+⸻
+
+	13.	FINAL CONCLUSION (SIMPLE VERSION)
+
+⸻
+
+This project shows how AI/data science methods can be used to understand student behavior data.
+	•	K-Means helped group similar students into clusters.
+	•	GMM helped estimate the data distribution (density) and visualize probability regions.
+	•	The E-M algorithm made it possible for GMM to fit the data probabilistically.
+	•	The plots helped compare model quality and explain the results clearly.
+
+This project is a strong example of clustering + density estimation for an 11th grade AI/CS assignment, and the documentation is written so a beginner can learn from it step by step.
