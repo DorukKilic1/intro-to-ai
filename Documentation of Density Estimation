@@ -579,149 +579,85 @@ This is the main density estimation visualization and it shows:
 This formula is used to show how average log likelihood changes with number of components and also the higher it is is better but it should be balanced.
 
 	8.	RESULTS
-
-DODODDODODODODD
-K-Means Results:
-	•	I tested K values from 2 to 10.
-	•	The elbow plot suggested a good choice around K = [write your result].
-	•	The silhouette score was best (or near best) at K = [write your result].
-	•	I selected K = 3 for the final model.
-	•	In the PCA plot, the clusters looked [well-separated / somewhat overlapping / highly overlapping].
+K-Means:
+	•	I tested thd K values thorugh 2 to 10.
+	•	I picked K = 3 for the final model.
+	•	In the PCA plot the clusters looked well seperated.
 
 GMM Results:
-	•	I tested 1 to 10 Gaussian components.
-	•	The BIC/AIC plot suggested [write best component count].
-	•	The log-likelihood increased as components increased, but after [write value], improvement became smaller.
-	•	The probability contour plot showed high-density regions where many students had similar study-hours and grades-after-AI values.
+	•	I tested 1 to 10 for the Gaussian components.
+	•	The log likelihood increased as components increased but after picking my value it became smaller.
+	•	The probability contour plot showed the high density regions meaning where many students had similar study-hours and grades-after-AI values.
 
 Interpretation:
-This suggests the dataset contains different student patterns, for example:
+This suggests that the dataset contains different student values.
+Like:
 	•	a group with more study hours and stronger grades after AI,
-	•	a middle/average group,
-	•	another group with different AI usage or lower study time.
+	•	a average group,
+	•	a group with different AI usage or lower study time.
 
-Why GMM is useful here:
-GMM gives probabilistic clusters and density estimates, so it can model overlapping groups better than K-Means.
+GMM is usefull here because it gives probabilistic clusters and density estimates.
+This makes it so that it can model overlapping groups better than K-Means.
 
-⸻
 
-	9.	HOW THIS PROJECT MATCHES THE ASSIGNMENT
+***Project Relation With Assigment***
 
-⸻
-
-Assignment Requirement: Investigate the dataset
-Done by:
+In this assigment I fulfilled the requirements by using:
 	•	df.head()
 	•	df.info()
 	•	df.isna().sum()
 	•	histograms of numeric features
 
-Assignment Requirement: Apply at least one density estimation method
-Done by:
+The one density estimation method was done by:
 	•	Gaussian Mixture Model (GMM) (density estimation)
-Also included:
+And also included:
 	•	K-Means clustering
 
-Assignment Requirement: Visualize clusters/distributions
-Done by:
+Visualizing clusters/distributions were done by:
 	•	histograms
 	•	PCA K-Means cluster plot
 	•	GMM contour and decision boundary plot
 
-Assignment Requirement: Visualize probability surfaces or decision boundaries
-Done by:
+Visualizing probability surfaces and decision boundaries were done by:
 	•	GMM probability contour surface
-	•	GMM component decision regions (contourf)
+	•	GMM component decision regions 
 
-Assignment Requirement: Visualize model fit quality
-Done by:
-	•	K-Means inertia (elbow)
+Visualizing the model fit quality was done by:
+	•	K-Means inertia
 	•	K-Means silhouette
 	•	GMM AIC/BIC
-	•	GMM average log-likelihood
+	•	GMM average log likelihood
 
-Assignment Requirement: Explain method used, E-M process, results
-Done by:
+Explaining the method used, the E-M process and the results were done by:
 	•	K-Means and GMM sections
 	•	E-M explanation
 	•	Results interpretation template
 
-Assignment Requirement: GitHub documentation with dataset, methods, code explanation, results
-Done by:
-	•	This documentation (can be pasted into README.md)
 
-⸻
+***DEMONSTRATION OF IMPLEMENTATION***
 
-	10.	DEMONSTRATION OF IMPLEMENTATION (WHAT YOU IMPLEMENTED)
-
-⸻
-
-In this project, I implemented:
+In this project I learned or imroved how to:
 	1.	Data loading and checking
-	2.	Missing value handling (dropna)
-	3.	Feature type separation (numeric, categorical, binary)
+	2.	Missing value handling
+	3.	How to seperate types
 	4.	Preprocessing with:
 	•	StandardScaler
 	•	OneHotEncoder
 	•	ColumnTransformer
-	5.	K-Means clustering
-	6.	K-Means model quality checks (inertia and silhouette)
-	7.	PCA for cluster visualization
-	8.	GMM for density estimation
-	9.	GMM quality checks (AIC, BIC, log-likelihood)
-	10.	GMM probability surface and decision boundary visualization
-	11.	Explanation of E-M algorithm and density estimation concepts
+	5.	How K-Means clustering works
+	6.	Checking K-Means model quality  
+	7.	Using PCA for cluster visualization
+	8.	Using GMM for density estimation
+	9.	Checking GMM quality
+	10.	Visualizing GMM probability surfaces and decision boundaries.
+	11. Document better on github
+	12. Use the terminal 
 
-⸻
-
-	11.	OPTIONAL CODE CLEANUP (TO MAKE IT EASIER FOR BEGINNERS)
-
-⸻
-
-These imports are currently not used:
-	•	train_test_split
-	•	Pipeline
-
-You can remove them to simplify the script.
-
-Also, these lines are flexible and currently do not remove any columns:
-	•	feature_cols = [c for c in all_cols if c not in []]
-	•	X_features = X.drop(columns=[])
-
-You can keep them (they are useful for future changes), but a beginner version could be simpler if you directly use all columns.
-
-⸻
-
-	12.	HOW TO RUN THE PROJECT (FOR GITHUB README)
-
-⸻
-
-	1.	Place the file students_ai_usage.csv in the same folder as your Python script or notebook.
-	2.	Install required libraries:
-pip install numpy pandas matplotlib scikit-learn
-	3.	Run the script (or notebook).
-	4.	Look at the generated plots:
-
-	•	histograms
-	•	elbow plot
-	•	silhouette plot
-	•	PCA cluster plot
-	•	GMM BIC/AIC plot
-	•	GMM probability surface plot
-	•	GMM log-likelihood plot
-
-	5.	Fill in the Results and Interpretation section using your actual plot observations.
-
-⸻
-
-	13.	FINAL CONCLUSION (SIMPLE VERSION)
-
-⸻
-
-This project shows how AI/data science methods can be used to understand student behavior data.
-	•	K-Means helped group similar students into clusters.
+This project teaches how to code, process data, use this data for creating graphs to understand better and calculate overall values for diffrenent desires.
+	•	K-Means  similar students into clusters.
 	•	GMM helped estimate the data distribution (density) and visualize probability regions.
 	•	The E-M algorithm made it possible for GMM to fit the data probabilistically.
 	•	The plots helped compare model quality and explain the results clearly.
 
 This project is a strong example of clustering + density estimation for an 11th grade AI/CS assignment, and the documentation is written so a beginner can learn from it step by step.
+dododododd
