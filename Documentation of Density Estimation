@@ -5,12 +5,12 @@ students_ai_usage.csv
 
 The Assigment:
 
-This assigment wanted me to analyze a dataset, generate the required graphs and estimate density.
+This assigment wanted me to analyze a dataset, generate the some graphs and estimate the data's density.
 
 
 ***Dataset Info***
 
-The dataset included the following information:
+This dataset included the following information:
 
 	•	age
 	•	study_hours_per_day
@@ -26,7 +26,7 @@ The dataset included the following information:
 ***Key Concepts I Learned***
 
 1) Clustering
-To group similar data points together automatically (without their labels).
+To group similar data points together automatically meaning without their labels.
 
 2) Density Estimation
 Where data points are more common meaning if many students have similar values that area has higher density.
@@ -207,7 +207,7 @@ X_features = X_features.dropna(subset=[“uses_ai”])
 This removes the rows where uses_ai wasn't yes or no in order for the map to not produce NaN.
 
 
-***Applying preprocessing***
+***Applying Preprocessing***
 
 X_proc = preprocess.fit_transform(X_features)
 This runs all preprocessing steps and produces a compeleted numeric matrix.
@@ -247,8 +247,6 @@ Plot lines:
 	•	plt.grid(True, alpha=0.3) adds a light colored grid
 	•	plt.show() shows the graph
 
-***K-Means Model Selection***
-
 sil_scores = []
 Creates a list to store silhouette scores.
 
@@ -268,6 +266,7 @@ Higher is usually better.
 Then plotting code:
 Same plotting steps as before but now it plots silhouette score vs K.
 
+
 ***Final K-Means Model and Cluster Labels***
 
 best_k = 3
@@ -278,6 +277,7 @@ This creates the final K-Means model.
 
 labels_km = kmeans.fit_predict(X_proc)
 Fits the K-Means and gives it a cluster label for each student.
+
 
 ***PCA (2D visualization of clusters)***
 
@@ -322,6 +322,7 @@ AIC and BIC were used to evaluate model fit while also lowering the excess compl
 
 Plot lines:
 Plots BIC and AIC across component counts to help choose the best number of components.
+
 
 ***GMM Probability Surface and Decision Boundaries***
 
@@ -397,7 +398,7 @@ That is also why AIC and BIC are important since they determine the component va
 Then the code draws the log likelihood vs the number of components graph. 
 
 
-***FORMULAS I USED IN THIS PROJECT***
+***Formulas I Used In This Project***
 
 A) Standardization Formula (used by StandardScaler)
 
@@ -546,8 +547,7 @@ This formula is used to convert log probability into standart probability densit
 This formula is used in order for more stabilization.
 
 
-***VISUALIZATIONS PRODUCED***
-
+***Visualizations Produced***
 
 1.	Numeric Feature Histograms
 These histograms show the distributions of numeric columns.
@@ -634,7 +634,7 @@ Explaining the method used, the E-M process and the results were done by:
 	•	Results interpretation template
 
 
-***DEMONSTRATION OF IMPLEMENTATION***
+***Demonstaration Of İmplemation***
 
 In this project I learned or imroved how to:
 	1.	Data loading and checking
