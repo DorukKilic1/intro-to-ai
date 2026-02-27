@@ -653,11 +653,8 @@ In this project I learned or imroved how to:
 	11. Document better on github
 	12. Use the terminal 
 
-This project teaches how to code, process data, use this data for creating graphs to understand better and calculate overall values for diffrenent desires.
-	•	K-Means  similar students into clusters.
+This project teaches how to code, process data, use this data for creating graphs, to understand better and calculate overall values for diffrenent desires.
+	•	K-Means helped similar students into clusters.
 	•	GMM helped estimate the data distribution (density) and visualize probability regions.
-	•	The E-M algorithm made it possible for GMM to fit the data probabilistically.
+	•	The E-M algorithm made it possible for GMM to fit the data better.
 	•	The plots helped compare model quality and explain the results clearly.
-
-This project is a strong example of clustering + density estimation for an 11th grade AI/CS assignment, and the documentation is written so a beginner can learn from it step by step.
-dododododd
