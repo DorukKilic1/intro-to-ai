@@ -19,15 +19,14 @@ The dataset contains information about students and their AI usage. Some of the 
 	•	grades_after_ai
 	•	daily_screen_time_hours
 
-This dataset mixes both numerical data and categorical data. For example, grades and study hours are numerical, while education level and AI tool used are categorical. Because of that, I had to preprocess the two types differently later in the project.
-
+This dataset mixes both numerical data and categorical data. For example, grades and study hours are numerical meaning numbers, while education level and AI tool used are categorical meaning words.
 I also created two extra variables:
 	•	grade_improvement = grades_after_ai - grades_before_ai
 	•	uses_ai_binary = converting Yes/No into 1/0
 
-These new columns made it easier to compare students and calculate relationships.
+These new columns made it easier to compare students and calculate graphs.
 
-Data Inspection and Cleaning
+***Data Inspection and Cleaning:***
 
 The first step in my code was loading the dataset and inspecting it. I checked:
 	•	the first 5 rows
@@ -36,25 +35,24 @@ The first step in my code was loading the dataset and inspecting it. I checked:
 	•	dataset info
 	•	missing values
 
-This helped me understand what I was working with before starting any analysis.
+This helped me understand what I was working with before working with it.
+After that I cleaned the data by removing extra spaces from the column names and from text columns meaning the empty data values.
 
-After that, I cleaned the data by removing extra spaces from the column names and from text columns. This is an important step because sometimes categories like "Yes" and " Yes " can look the same to a human but are treated as different values by Python. Cleaning made the dataset more consistent and prevented mistakes later.
-
-Descriptive Analysis
+***Descriptive Analysis:***
 
 After cleaning the data, I explored it with descriptive statistics. I used .describe() for the numeric columns and .value_counts() for the categorical columns. This helped me see the overall patterns in the dataset, like averages, spreads, and how often each category appeared.
 
 Then I created visualizations such as:
-	•	bar charts for AI usage and education level
-	•	histogram of grade improvement
+	•	bar charts for AI usage and education level (Bar charts are graphs that use rectangular shapes to show how often a value appears.)
+	•	histogram of grade improvement (A graph that shows how often different number ranges appear)
 	•	scatter plots showing relationships between:
 	•	study hours and grades after AI
 	•	screen time and grade improvement
-	•	grades before AI and grades after AI
+	•	grades before AI and grades after AI (Scatter Plot is a graph to see the relationship for two variables using dots.)
 
-These graphs made the dataset easier to understand visually. Instead of only reading numbers, I could actually see the patterns.
+These graphs made the dataset easier to understand. Instead of only reading numbers I could see the patterns.
 
-Comparing Different Groups
+***Comparing Different Groups:***
 
 One of the most important parts of my analysis was comparing groups. I compared:
 	•	AI users vs non-users
@@ -62,29 +60,33 @@ One of the most important parts of my analysis was comparing groups. I compared:
 	•	different purposes of AI use
 	•	school students vs college students
 
-For example, I calculated the average study time, grades, screen time, and grade improvement for AI users and non-users. I also checked which AI tools were linked to higher average grade improvement, and whether using AI for homework, research, or coding made any difference.
+For example:
+I calculated the average study time, grades, screen time and grade improvement for AI users and non-users. I also checked which AI tools were linked to higher average grade improvement and whether using AI for homework, research or coding made any difference.
 
-This part of the project helped answer the real question behind the dataset: not just “Do students use AI?” but “How is that use connected to academic results?”
+***Correlation Analysis:***
 
-Correlation Analysis
+Next I used a correlation matrix and a heatmap to measure how close the numerical variables were related to each other. The correlation helps show patterns if there is a relationship or not.
+For example this analysis can help show whether grade improvement is related to study hours, screen time or AI use. The heatmap was useful because it made the correlations easier to read with color and numbers together.
+- A Heatmap is a graph that uses colors to show the strength of values or their relationships in data.
+- A correlation matrix is a table that shows how strongly some variables are related to each other.
 
-Next, I used a correlation matrix and a heatmap to measure how strongly the numerical variables were related to each other. Correlation does not prove cause, but it helps show patterns.
+***Preprocessing for PCA and ICA:***
 
-For example, this analysis can help show whether grade improvement is more closely related to study hours, screen time, or AI use. The heatmap was useful because it made the correlations easier to read with color and numbers together.
+- PCA is a method that reduces data into the most important values skipping the repeating ones.
+- ICA is a method that separates hidden independent patterns in the data.
 
-Preprocessing for PCA and ICA
-
-Before using PCA and ICA, I needed to preprocess the dataset properly. Since the dataset has both numeric and categorical columns, I used:
-	•	SimpleImputer to fill missing values
-	•	StandardScaler to scale numeric features
-	•	OneHotEncoder to convert categorical features into machine-readable form
+Before using PCA and ICA I needed to preprocess the dataset properly. Since the dataset has both numeric and categorical columns, I used:
+	•	SimpleImputer to fill missing values with values that hold no value
+	•	StandardScaler to scale numeric features into less complex versions
+	•	OneHotEncoder to convert categorical features into machine-readable form meaning converting yes/no to 0/1.
 	•	ColumnTransformer and Pipeline to organize these steps
 
-This preprocessing part is important because advanced methods like PCA and ICA need the data in a clean numerical format.
+This preprocessing part is important because advanced methods like PCA and ICA need the data in a clean numerical format or else it wouldnt be accurate.
 
-PCA Analysis
 
-I used Principal Component Analysis (PCA) to reduce the dataset into 2 main components. PCA helps summarize the most important variation in the data with fewer dimensions.
+****PCA Analysis:***
+
+I used Principal Component Analysis (PCA) to reduce the dataset into 2 main components. PCA helps generate the most important values in the data with fewer dimensions.
 
 In my project, PCA allowed me to:
 	•	project the dataset into 2D
@@ -92,28 +94,33 @@ In my project, PCA allowed me to:
 	•	measure explained variance
 	•	find which original features contributed most strongly to the principal components
 
-I also printed the top feature loadings for PC1 and PC2. This helped me understand which variables had the biggest influence in the reduced representation.
+I also printed the top feature loadings for PC1 and PC2. This helped me understand which variables had the biggest influence inside the dataset in the basic representation.
 
-ICA Analysis
 
-I also used Independent Component Analysis (ICA). Unlike PCA, which focuses on variance, ICA tries to separate hidden independent patterns in the data.
+***ICA Analysis:***
 
-In this project, ICA was another way to visualize the structure of the dataset and compare it with PCA. Even if the dataset was not a perfect case for ICA, it still helped demonstrate a different kind of transform and showed how independent patterns might appear in student data.
+I also used Independent Component Analysis (ICA). Unlike PCA which focuses on variance ICA tries to separate hidden independent patterns in the data.
+In this project ICA was another way to visualize the structure of the dataset and compare it with PCA. Even if the dataset was not a perfect for ICA calculation it still helped demonstrate a different kind of transform and showed how independent patterns might appear in student data.
 
-Signal Processing Demonstrations
 
-One of the most creative parts of my project was turning the grade_improvement column into a simple one-dimensional signal. I clearly noted in the code that this is only a demonstration, because the student index is not a true time axis. Still, it let me apply signal-processing methods required by the assignment.
+***Signal Processing Demonstrations:***
 
-Sonification
+One of the most creative parts of my project was turning the grade_improvement column into a simple one-dimensional signal meaning reading all the values as 1 line. I clearly noted in the code that this is only a demonstration because the student index is not a true time axis. 
 
-I converted the grade improvement signal into audio. This means I turned the data into sound so it could be explored in a different way. This was interesting because it showed that data does not always need to be seen as a graph — it can also be heard.
 
-FFT
+***Sonification:***
 
+I converted the signal I created into audio. This means I turned the data into sound so it could be explored in a different way. This was interesting because it showed that data does not always need to be seen as a graph it can also be converted to audio.
+
+***FFT:***
+
+- Fast Fourier Transform is a method that breaks a signal into its different frequencies to show hidden patterns.
 I used the Fast Fourier Transform (FFT) to study the frequency content of the signal. This showed whether there were repeating patterns or dominant frequencies in the sequence.
 
-Spectrogram
 
+***Spectrogram:***
+DODODODODOD
+- A spectrogram is a graph that is used to show how the frequencies in a signal change over time or if they dont change.
 I created a spectrogram to show how the frequency content changed across the signal. Again, since this is not true time-series data, it is more of a demonstration than a real scientific conclusion, but it still showed how the method works.
 
 Wavelets
