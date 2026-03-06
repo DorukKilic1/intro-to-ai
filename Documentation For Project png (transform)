@@ -9,31 +9,31 @@ While writing this code I divided the notebook into clear parts for better organ
 ***Description of the Data:***
 
 The dataset contains information about students and their AI usage. Some of the columns are:
-	•	age
-	•	education_level
-	•	study_hours_per_day
-	•	uses_ai
-	•	ai_tools_used
-	•	purpose_of_ai
-	•	grades_before_ai
-	•	grades_after_ai
-	•	daily_screen_time_hours
+		age
+		education_level
+		study_hours_per_day
+		uses_ai
+		ai_tools_used
+		purpose_of_ai
+		grades_before_ai
+		grades_after_ai
+		daily_screen_time_hours
 
 This dataset mixes both numerical data and categorical data. For example, grades and study hours are numerical meaning numbers, while education level and AI tool used are categorical meaning words.
 I also created two extra variables:
-	•	grade_improvement = grades_after_ai - grades_before_ai
-	•	uses_ai_binary = converting Yes/No into 1/0
+		grade_improvement = grades_after_ai - grades_before_ai
+		uses_ai_binary = converting Yes/No into 1/0
 
 These new columns made it easier to compare students and calculate graphs.
 
 ***Data Inspection and Cleaning:***
 
 The first step in my code was loading the dataset and inspecting it. I checked:
-	•	the first 5 rows
-	•	dataset shape
-	•	column names
-	•	dataset info
-	•	missing values
+		the first 5 rows
+		dataset shape
+		column names
+		dataset info
+		missing values
 
 This helped me understand what I was working with before working with it.
 After that I cleaned the data by removing extra spaces from the column names and from text columns meaning the empty data values.
@@ -43,22 +43,22 @@ After that I cleaned the data by removing extra spaces from the column names and
 After cleaning the data, I explored it with descriptive statistics. I used .describe() for the numeric columns and .value_counts() for the categorical columns. This helped me see the overall patterns in the dataset, like averages, spreads, and how often each category appeared.
 
 Then I created visualizations such as:
-	•	bar charts for AI usage and education level (Bar charts are graphs that use rectangular shapes to show how often a value appears.)
-	•	histogram of grade improvement (A graph that shows how often different number ranges appear)
-	•	scatter plots showing relationships between:
-	•	study hours and grades after AI
-	•	screen time and grade improvement
-	•	grades before AI and grades after AI (Scatter Plot is a graph to see the relationship for two variables using dots.)
+		bar charts for AI usage and education level (Bar charts are graphs that use rectangular shapes to show how often a value appears.)
+		histogram of grade improvement (A graph that shows how often different number ranges appear)
+		scatter plots showing relationships between:
+		study hours and grades after AI
+		screen time and grade improvement
+		grades before AI and grades after AI (Scatter Plot is a graph to see the relationship for two variables using dots.)
 
 These graphs made the dataset easier to understand. Instead of only reading numbers I could see the patterns.
 
 ***Comparing Different Groups:***
 
 One of the most important parts of my analysis was comparing groups. I compared:
-	•	AI users vs non-users
-	•	different AI tools
-	•	different purposes of AI use
-	•	school students vs college students
+		AI users vs non-users
+		different AI tools
+		different purposes of AI use
+		school students vs college students
 
 For example:
 I calculated the average study time, grades, screen time and grade improvement for AI users and non-users. I also checked which AI tools were linked to higher average grade improvement and whether using AI for homework, research or coding made any difference.
@@ -76,10 +76,10 @@ For example this analysis can help show whether grade improvement is related to 
 - ICA is a method that separates hidden independent patterns in the data.
 
 Before using PCA and ICA I needed to preprocess the dataset properly. Since the dataset has both numeric and categorical columns, I used:
-	•	SimpleImputer to fill missing values with values that hold no value
-	•	StandardScaler to scale numeric features into less complex versions
-	•	OneHotEncoder to convert categorical features into machine-readable form meaning converting yes/no to 0/1.
-	•	ColumnTransformer and Pipeline to organize these steps
+		SimpleImputer to fill missing values with values that hold no value
+		StandardScaler to scale numeric features into less complex versions
+		OneHotEncoder to convert categorical features into machine-readable form meaning converting yes/no to 0/1.
+		ColumnTransformer and Pipeline to organize these steps
 
 This preprocessing part is important because advanced methods like PCA and ICA need the data in a clean numerical format or else it wouldnt be accurate.
 
@@ -89,10 +89,10 @@ This preprocessing part is important because advanced methods like PCA and ICA n
 I used Principal Component Analysis (PCA) to reduce the dataset into 2 main components. PCA helps generate the most important values in the data with fewer dimensions.
 
 In my project, PCA allowed me to:
-	•	project the dataset into 2D
-	•	visualize students in a simpler way
-	•	measure explained variance
-	•	find which original features contributed most strongly to the principal components
+		project the dataset into 2D
+		visualize students in a simpler way
+		measure explained variance
+		find which original features contributed most strongly to the principal components
 
 I also printed the top feature loadings for PC1 and PC2. This helped me understand which variables had the biggest influence inside the dataset in the basic representation.
 
@@ -119,70 +119,51 @@ I used the Fast Fourier Transform (FFT) to study the frequency content of the si
 
 
 ***Spectrogram:***
-DODODODODOD
-- A spectrogram is a graph that is used to show how the frequencies in a signal change over time or if they dont change.
-I created a spectrogram to show how the frequency content changed across the signal. Again, since this is not true time-series data, it is more of a demonstration than a real scientific conclusion, but it still showed how the method works.
 
-Wavelets
+- A spectrogram is a graph that is used to show how the frequencies in a signal change over time if they change.
+I created a spectrogram to show how the frequency changed across the signal. 
 
-I applied a wavelet transform to look at localized patterns at different scales. Wavelets are useful because they can capture both position and scale at the same time, unlike FFT which focuses more on frequency only.
 
-Filters
+***Wavelets:***
+
+- Wavelets are a method used to detect patterns in a signal at different scales and positions.
+I applied a wavelet transform to look at localized patterns meaning patterns that appear at certain values at different scales. Wavelets are useful because they can capture both position and scale at the same time unlike FFT which focuses on frequency only.
+
+
+***Filters:***
 
 I used low-pass and high-pass Butterworth filters.
-	•	The low-pass filter smoothed the signal.
-	•	The high-pass filter highlighted faster changes.
+		The low-pass filter smoothed the signal. (The low pass filter removes the fast frequencies.)
+		The high-pass filter highlighted faster changes. (The high pass filter removes the slow frequencies.)
 
-This helped show how filters can isolate different kinds of patterns.
+This taught me how filters can isolate different kinds of patterns.
 
-Compressed Sensing Style Demonstration
+***Compressed Sensing Style Demonstration:***
 
-Finally, I created a simple compressed sensing style demo by randomly sampling only part of the signal and reconstructing the rest with interpolation. This was not full compressed sensing in the advanced mathematical sense, but it demonstrated the basic idea that we can estimate missing data from partial observations.
+Finally I created a simple compressed sensing style demo by randomly sampling only part of the signal meaning I kept some random data points and reconstructing the rest with interpolation this means I estimated the missing values between the points I had.
 
-What My Analysis Shows
+***What My Analysis Shows:***
 
-Overall, this project helped me study student AI usage from different angles. The basic analysis showed how AI use connects with grades, study time, and screen time. The group comparisons made it possible to compare different types of students and different kinds of AI use. The advanced transforms showed that the same dataset can also be explored using more technical methods from machine learning and signal processing.
+Overall this project helped me study how to use data and calculate difrenent values and graphs with it. The basic analysis showed how AI use connects with grades study time and screen time. The group comparisons made it compareable for different types of students and different kinds of AI use. The advanced transforms showed that the same dataset can also be explored using more technical methods from machine learning and signal processing.
 
-One important thing I learned is that data analysis is not just about running code. It is also about thinking carefully about what the data actually means. For example, I had to be honest that the signal processing part was a demonstration and not a real time-series experiment. I think that makes the project stronger, because it shows that I understand the limits of my own analysis.
+One important thing I learned is that data analysis is not just about running code, it is also about thinking carefully about what the data actually means. For example I had to be honest that the signal processing part was a demonstration and not a real experiment. I think that makes the project stronger because it shows that I understand the limits of my own analysis. The data processing part was inferior because the data wasnt made for that.
 
-Conclusion
+***Conclusion***
 
-To conclude, this project combines data cleaning, visualization, group comparison, correlation analysis, preprocessing, PCA, ICA, and signal processing demonstrations in one workflow. I chose the topic because AI in education is very relevant today, especially for students.
+To conclude this project combines data cleaning, visualization, group comparison, correlation analysis, preprocessing, PCA, ICA, and signal processing demonstrations in one assigment.
+I think this project shows both the coding side of phyton and the technical side of data analysis. It helped me understand how different methods can be used to explore a dataset in multiple ways.
 
-I think this project shows both the practical side of AI and the technical side of data analysis. It helped me understand not only how students use AI, but also how different methods can be used to explore a dataset in multiple ways. If I improved this project in the future, I would use a larger dataset and maybe add real statistical tests or machine learning models to make the conclusions stronger.
+***What I learned/Improved:***
 
-⸻
+	1) Coding at Phyton.
+	2) Terminal Usage.
+	3) Importing libaries for specific purposes.
+	4) Methods for analysis.
+	5) New Formulas for Certain Values.
+	6) Generating Graphs from Data.
+	7) Converting Diffrenent Values to Other Types.
+	8) Converting Data to Audio
+	9) Audio Methods to Find Certain Values.
+	10) Github Usage
 
-Short “Code Explanation” Section
-
-You can also add this under your document if your teacher wants a more direct explanation of the code:
-
-Code Structure Summary
-
-My code is divided into 24 parts:
-	1.	importing libraries
-	2.	loading and inspecting the dataset
-	3.	cleaning text and column names
-	4.	creating new features
-	5.	descriptive statistics
-	6.	basic visualizations
-	7.	comparing AI users and non-users
-	8.	comparing AI tools
-	9.	comparing purposes of AI use
-	10.	correlation analysis
-	11.	preprocessing data
-	12.	PCA
-	13.	PCA feature importance
-	14.	ICA
-	15.	comparing education levels
-	16.	deeper AI-user analysis
-	17.	creating a signal from grade improvement
-	18.	sonification
-	19.	FFT
-	20.	spectrogram
-	21.	wavelets
-	22.	filters
-	23.	compressed sensing style demo
-	24.	final summary of results
-
-This structure made the notebook easier to read and made each part of the assignment clear.
+Lastly I had alot of fun and learned alot from the process of creating this project. I improved alot on analizing data.
